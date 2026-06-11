@@ -1,6 +1,7 @@
 import { Activity, Bell, LineChart, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { strings } from "@/lib/strings/nb";
+import { Avatar } from "@/components/Avatar";
 import {
   loadDashboardData,
   type RevolvingDoorTransition,
@@ -150,7 +151,7 @@ function FeedItem({ transition: t }: { transition: RevolvingDoorTransition }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="size-10 rounded-full bg-[var(--color-secondary-container)] shrink-0" />
+          <Avatar personId={t.personId} name={t.personName} size="sm" />
           <div className="min-w-0">
             <p className="font-semibold text-sm truncate">{t.personName}</p>
             <p className="text-xs text-[var(--color-fg-muted)] truncate">
@@ -179,7 +180,7 @@ function ConflictCard({ conflict }: { conflict: ConflictOfInterest }) {
       href={`/profile/${encodeURIComponent(conflict.personId)}`}
       className={`card-surface ${border} w-44 shrink-0 p-3 flex flex-col items-center gap-2 hover:border-[var(--color-primary)]/60 transition-colors`}
     >
-      <div className="size-16 rounded-full bg-[var(--color-secondary-container)]" />
+      <Avatar personId={conflict.personId} name={conflict.personName} size="lg" />
       <p className="text-sm font-semibold text-center truncate w-full">
         {conflict.personName}
       </p>

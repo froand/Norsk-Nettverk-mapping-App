@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ChevronRight, X } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
+import { Avatar } from "@/components/Avatar";
+import { usePhotoMap } from "@/components/PhotoMapProvider";
 import type {
   ConflictOfInterest,
   GraphData,
@@ -37,6 +39,8 @@ interface ForceGraphNode {
   size: number;
   /** Highest conflict severity rank if person has one. */
   conflictRank: number;
+  /** Wikimedia / Stortinget portrait URL if available. */
+  imageUrl?: string;
   x?: number;
   y?: number;
 }
@@ -72,6 +76,30 @@ export function NetworkCanvas({ overview, conflicts }: Props) {
   // react-force-graph types are loose; use any to bridge.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graphRef = useRef<any>(null);
+  const photoMap = usePhotoMap();
+
+  // Image preloader — kicks off HTMLImageElement loads per node.
+  // We bump a "version" on every load so the canvas re-paints; this is
+  // cheaper than re-rendering the whole graph or recomputing data.
+  const imageCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const [, setLoadedTick] = useState(0);
+
+  const getOrLoadImage = useCallback((id: string, url: string): HTMLImageElement | null => {
+    const cache = imageCacheRef.current;
+    const existing = cache.get(id);
+    if (existing) return existing.complete && existing.naturalWidth > 0 ? existing : null;
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.referrerPolicy = "no-referrer";
+    img.decoding = "async";
+    img.onload = () => setLoadedTick((t) => t + 1);
+    img.onerror = () => {
+      cache.delete(id);
+    };
+    img.src = url;
+    cache.set(id, img);
+    return null;
+  }, []);
 
   // Track container size for responsive sizing.
   useEffect(() => {
@@ -103,8 +131,8 @@ export function NetworkCanvas({ overview, conflicts }: Props) {
 
   // Build the typed graph data with filters applied.
   const data = useMemo(
-    () => buildGraphData(overview, conflictByPerson, filter),
-    [overview, conflictByPerson, filter],
+    () => buildGraphData(overview, conflictByPerson, filter, photoMap),
+    [overview, conflictByPerson, filter, photoMap],
   );
 
   const handleNodeClick = useCallback((node: object) => {
@@ -157,7 +185,7 @@ export function NetworkCanvas({ overview, conflicts }: Props) {
             node: any,
             ctx: CanvasRenderingContext2D,
             globalScale: number,
-          ) => paintNode(node, ctx, globalScale)}
+          ) => paintNode(node, ctx, globalScale, getOrLoadImage)}
           nodePointerAreaPaint={(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             node: any,
@@ -214,16 +242,21 @@ function BottomSheet({
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1rem)" }}
       >
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-[var(--color-fg-dim)]">
-              {kindLabel}
-            </p>
-            <h3 className="text-lg font-bold leading-tight truncate">{node.name}</h3>
-            {node.conflictRank > 0 ? (
-              <span className="chip mt-2 badge-warning text-[10px] uppercase tracking-wider">
-                Aktiv konflikt
-              </span>
+          <div className="flex items-start gap-3 min-w-0">
+            {node.type === "person" ? (
+              <Avatar personId={node.id} imageUrl={node.imageUrl} name={node.name} size="md" />
             ) : null}
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--color-fg-dim)]">
+                {kindLabel}
+              </p>
+              <h3 className="text-lg font-bold leading-tight truncate">{node.name}</h3>
+              {node.conflictRank > 0 ? (
+                <span className="chip mt-2 badge-warning text-[10px] uppercase tracking-wider">
+                  Aktiv konflikt
+                </span>
+              ) : null}
+            </div>
           </div>
           <button
             type="button"
@@ -260,6 +293,7 @@ function buildGraphData(
   overview: GraphData,
   conflictByPerson: Map<string, { rank: number; count: number }>,
   filter: FilterKey,
+  photoMap: Map<string, string>,
 ): { nodes: ForceGraphNode[]; links: ForceGraphLink[] } {
   const nodeById = new Map<string, GraphNode>();
   for (const n of overview.nodes) nodeById.set(n.id, n);
@@ -308,13 +342,16 @@ function buildGraphData(
     .map((n) => {
       const conflictInfo = conflictByPerson.get(n.id);
       const deg = degree.get(n.id) ?? 0;
+      const imageUrl = n.type === "person" ? (n.imageUrl ?? photoMap.get(n.id)) : undefined;
       return {
         id: n.id,
         name: n.name,
         type: n.type,
         group: n.group,
-        size: 4 + Math.min(deg, 8),
+        // Slightly bigger when we have a portrait — they look better at scale.
+        size: (imageUrl ? 6 : 4) + Math.min(deg, 8),
         conflictRank: conflictInfo?.rank ?? 0,
+        imageUrl,
       };
     });
 
@@ -352,18 +389,52 @@ function paintNode(
   node: ForceGraphNode,
   ctx: CanvasRenderingContext2D,
   globalScale: number,
+  getImage: (id: string, url: string) => HTMLImageElement | null,
 ): void {
   if (node.x == null || node.y == null) return;
   const r = node.size;
-  ctx.beginPath();
-  ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
-  ctx.fillStyle = nodeColor(node);
-  ctx.fill();
-  if (node.conflictRank > 0) {
-    ctx.strokeStyle = "rgba(255,185,95,0.9)";
-    ctx.lineWidth = 1.2;
+
+  // Try to paint the photo as a circular clip if available.
+  let painted = false;
+  if (node.imageUrl) {
+    const img = getImage(node.id, node.imageUrl);
+    if (img) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+      ctx.closePath();
+      ctx.clip();
+      // Centre-crop the image to a square that fits the circle's bbox.
+      const d = r * 2;
+      const sw = img.naturalWidth;
+      const sh = img.naturalHeight;
+      const side = Math.min(sw, sh);
+      const sx = (sw - side) / 2;
+      // Pull crop slightly upward — heads sit better in portrait crops.
+      const sy = Math.max(0, (sh - side) / 2 - side * 0.1);
+      ctx.drawImage(img, sx, sy, side, side, node.x - r, node.y - r, d, d);
+      ctx.restore();
+      painted = true;
+    }
+  }
+
+  if (!painted) {
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+    ctx.fillStyle = nodeColor(node);
+    ctx.fill();
+  }
+
+  // Outline — orange for conflict, otherwise subtle white for photos.
+  const hasConflict = node.conflictRank > 0;
+  if (hasConflict || painted) {
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+    ctx.strokeStyle = hasConflict ? "rgba(255,185,95,0.9)" : "rgba(122,160,255,0.6)";
+    ctx.lineWidth = hasConflict ? 1.4 : 0.9;
     ctx.stroke();
   }
+
   // Only label at higher zoom levels or for big nodes (avoid clutter).
   if (globalScale >= 1.6 || node.size >= 10) {
     const fontSize = Math.max(2.5, 10 / globalScale);

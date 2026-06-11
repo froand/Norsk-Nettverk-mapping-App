@@ -2,14 +2,22 @@ import { Router } from 'express';
 import { getCompanyRoles, getPersonRolesNetwork } from '../services/brreg.js';
 import { getPoliticalData, getPersonPoliticalNetwork, getPersonTimeline, getAllTimelines, getConflictsForPerson, getAllConflicts } from '../services/political-data.js';
 import { getPartyRepresentatives, getPersonDetails } from '../services/stortinget.js';
-import type { GraphData } from '../types.js';
+import { attachPhotoUrl, getPhotoUrl } from '../services/photos.js';
+import type { GraphData, GraphNode } from '../types.js';
 
 export const graphRoutes = Router();
+
+function decorateNodes(data: GraphData): GraphData {
+  return {
+    nodes: data.nodes.map((n) => attachPhotoUrl(n as GraphNode)),
+    links: data.links,
+  };
+}
 
 // Get full overview graph (political data + optional company data)
 graphRoutes.get('/overview', async (_req, res) => {
   const data = getPoliticalData();
-  res.json(data);
+  res.json(decorateNodes(data));
 });
 
 // Get graph centered on a specific person (combines political + brreg data)
@@ -34,7 +42,7 @@ graphRoutes.get('/person/:personId', async (req, res) => {
 
   // Merge both
   const merged = mergeGraphData(political, brreg);
-  res.json(merged);
+  res.json(decorateNodes(merged));
 });
 
 // Get graph for a company (from brreg.no)
@@ -58,7 +66,7 @@ graphRoutes.get('/person-by-name/:name', async (req, res) => {
     );
     const brreg = await getPersonRolesNetwork(name);
     const merged = mergeGraphData(political, brreg);
-    res.json(merged);
+    res.json(decorateNodes(merged));
   } catch (error) {
     console.error('Person search error:', error);
     res.status(500).json({ error: 'Failed to fetch person data' });
@@ -109,7 +117,7 @@ graphRoutes.get('/expand/:nodeId', async (req, res) => {
     }
   }
 
-  res.json(result);
+  res.json(decorateNodes(result));
 });
 
 function mergeGraphData(a: GraphData, b: GraphData): GraphData {
@@ -223,7 +231,8 @@ graphRoutes.get('/person-details/:personId', async (req, res) => {
   try {
     const details = await getPersonDetails(personId);
     if (details) {
-      res.json(details);
+      const withPhoto = details.imageUrl ? details : { ...details, imageUrl: getPhotoUrl(personId) };
+      res.json(withPhoto);
       return;
     }
 
@@ -283,7 +292,7 @@ graphRoutes.get('/person-details/:personId', async (req, res) => {
       fylke: undefined,
       email: undefined,
       birthYear: undefined,
-      imageUrl: undefined,
+      imageUrl: getPhotoUrl(personId),
       committees: undefined,
       currentPositions,
       pastPositions,

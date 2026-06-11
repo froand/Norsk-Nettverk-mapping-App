@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Eye, EyeOff, X } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
 import { useWatchlist } from "@/lib/use-watchlist";
+import { Avatar } from "@/components/Avatar";
 import type { AlertItem } from "@/lib/alerts-data";
 
 interface Props {
@@ -60,7 +61,7 @@ export function WatchlistSection({ alerts }: Props) {
               key={entry.personId}
               className="card-surface p-3 flex items-center gap-3"
             >
-              <div className="size-10 rounded-full bg-[var(--color-secondary-container)] shrink-0" />
+              <Avatar personId={entry.personId} name={entry.name} size="sm" />
               <Link
                 href={`/profile/${encodeURIComponent(entry.personId)}`}
                 className="flex-1 min-w-0"

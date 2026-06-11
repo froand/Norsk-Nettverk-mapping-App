@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, Search } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
+import { Avatar } from "@/components/Avatar";
 import type { DirectoryRow, DirectoryTag } from "@/lib/katalog-data";
 
 type FilterKey = "all" | "politicians" | "board" | "karantene" | "conflicts";
@@ -138,7 +139,7 @@ function KatalogRow({ row }: { row: DirectoryRow }) {
         href={`/profile/${encodeURIComponent(row.personId)}`}
         className="card-surface p-3 flex items-start gap-3 hover:border-[var(--color-primary)]/50 transition-colors"
       >
-        <div className="size-12 rounded-full bg-[var(--color-secondary-container)] shrink-0" />
+        <Avatar personId={row.personId} name={row.name} size="md" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <p className="font-semibold text-sm truncate">{row.name}</p>

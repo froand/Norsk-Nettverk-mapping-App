@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
 import { loadProfile } from "@/lib/profile-data";
+import { Avatar } from "@/components/Avatar";
 import { WatchToggleButton } from "../../varsler/watchlist-section";
 import type {
   ConflictOfInterest,
@@ -64,7 +65,14 @@ export default async function ProfilePage({
 
       <section className="px-4 pt-4">
         <div className="flex items-start gap-4">
-          <div className="size-20 rounded-2xl bg-[var(--color-secondary-container)] border border-[var(--color-border)] shrink-0" />
+          <Avatar
+            name={details.name}
+            personId={details.id}
+            imageUrl={details.imageUrl}
+            size="xl"
+            rounded="2xl"
+            priority
+          />
           <div className="min-w-0">
             <h1 className="text-xl font-bold leading-tight">{details.name}</h1>
             {currentTopRole ? (

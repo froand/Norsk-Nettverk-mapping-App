@@ -1,0 +1,382 @@
+[
+  {
+    "personId": "person-jonas-gahr-store",
+    "personName": "Jonas Gahr Støre",
+    "wikidataId": "Q467948",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Prime%20Minister%20Gahr%20Store%20in%20April%202025.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Prime%20Minister%20Gahr%20Store%20in%20April%202025.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:40.694Z"
+  },
+  {
+    "personId": "person-erna-solberg",
+    "personName": "Erna Solberg",
+    "wikidataId": "Q291644",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Erna%20Solberg%2C%20EPP%20Congress%202025%20Valencia%20Day%201%20%2854484743746%2C%20cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Erna%20Solberg%2C%20EPP%20Congress%202025%20Valencia%20Day%201%20%2854484743746%2C%20cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:41.197Z"
+  },
+  {
+    "personId": "person-trygve-slagsvold-vedum",
+    "personName": "Trygve Slagsvold Vedum",
+    "wikidataId": "Q548001",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Trygve%20S%20Vedum%20kandidater%20Sp%2C%20stortingsvalget%202013.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Trygve%20S%20Vedum%20kandidater%20Sp%2C%20stortingsvalget%202013.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:42.365Z"
+  },
+  {
+    "personId": "person-jan-tore-sanner",
+    "personName": "Jan Tore Sanner",
+    "wikidataId": "Q156553",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Jan%20Tore%20Sanner%20%282017-03-12%20bilde03%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Jan%20Tore%20Sanner%20%282017-03-12%20bilde03%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:42.962Z"
+  },
+  {
+    "personId": "person-anniken-huitfeldt",
+    "personName": "Anniken Huitfeldt",
+    "wikidataId": "Q156540",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Anniken%20Huitfeldt%20at%20the%20Ukraine%20Recovery%20Conference%202023.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anniken%20Huitfeldt%20at%20the%20Ukraine%20Recovery%20Conference%202023.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:43.893Z"
+  },
+  {
+    "personId": "person-nikolai-astrup",
+    "personName": "Nikolai Astrup",
+    "wikidataId": "Q958608",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Portrett%20av%20Nikolai%20Astrup.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Portrett%20av%20Nikolai%20Astrup.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:44.612Z"
+  },
+  {
+    "personId": "person-monica-maeland",
+    "personName": "Monica Mæland",
+    "wikidataId": "Q6515796",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Monica%20november%202022%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Monica%20november%202022%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:45.543Z"
+  },
+  {
+    "personId": "person-torbjorn-roe-isaksen",
+    "personName": "Torbjørn Røe Isaksen",
+    "wikidataId": "Q329487",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Torbj%C3%B8rn%20R%C3%B8e%20Isaksen%20%282017-03-11%20bilde01%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Torbj%C3%B8rn%20R%C3%B8e%20Isaksen%20%282017-03-11%20bilde01%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:46.261Z"
+  },
+  {
+    "personId": "person-siv-jensen",
+    "personName": "Siv Jensen",
+    "wikidataId": "Q272938",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Siv%20Jensen%20%28190936%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Siv%20Jensen%20%28190936%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:46.761Z"
+  },
+  {
+    "personId": "person-sylvi-listhaug",
+    "personName": "Sylvi Listhaug",
+    "wikidataId": "Q7660866",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Sylvi%20Listhaug%20%28163%20KIL-6820%29%20%28cropped2%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Sylvi%20Listhaug%20%28163%20KIL-6820%29%20%28cropped2%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:47.245Z"
+  },
+  {
+    "personId": "person-bent-hoie",
+    "personName": "Bent Høie",
+    "wikidataId": "Q457128",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Bent%20H%C3%B8ie%202009%20%28cropped%29.JPG",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Bent%20H%C3%B8ie%202009%20%28cropped%29.JPG?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:47.749Z"
+  },
+  {
+    "personId": "person-abid-raja",
+    "personName": "Abid Raja",
+    "wikidataId": "Q4590497",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Viken%20Venstre%20Valgkamp-oppvarming%20%2829908127397%29%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Viken%20Venstre%20Valgkamp-oppvarming%20%2829908127397%29%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:48.242Z"
+  },
+  {
+    "personId": "person-ketil-solvik-olsen",
+    "personName": "Ketil Solvik-Olsen",
+    "wikidataId": "Q6395414",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/29.08.2017%20Ketil%20Solvik-Olsen%20003.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/29.08.2017%20Ketil%20Solvik-Olsen%20003.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:48.742Z"
+  },
+  {
+    "personId": "person-per-sandberg",
+    "personName": "Per Sandberg",
+    "wikidataId": "Q935613",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/PSandberg2154%202E%20jpg%20DF0000063007.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/PSandberg2154%202E%20jpg%20DF0000063007.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:50.029Z"
+  },
+  {
+    "personId": "person-linda-hofstad-helleland",
+    "personName": "Linda Hofstad Helleland",
+    "wikidataId": "Q6514654",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Linda%20Cathrine%20Hofstad%20Helleland.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Linda%20Cathrine%20Hofstad%20Helleland.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:50.515Z"
+  },
+  {
+    "personId": "person-ine-eriksen-soreide",
+    "personName": "Ine Eriksen Søreide",
+    "wikidataId": "Q1770992",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Ine%20Eriksen%20S%C3%B8reide%2C%202020%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Ine%20Eriksen%20S%C3%B8reide%2C%202020%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:51.007Z"
+  },
+  {
+    "personId": "person-iselin-nybo",
+    "personName": "Iselin Nybø",
+    "wikidataId": "Q15079451",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Iselin%20Nyb%C3%B8%20%2850384279298%29%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Iselin%20Nyb%C3%B8%20%2850384279298%29%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:51.518Z"
+  },
+  {
+    "personId": "person-trine-skei-grande",
+    "personName": "Trine Skei Grande",
+    "wikidataId": "Q3356825",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Trine%20Skei%20Grande%20%28Venstre%29%20-%20February%202019%20%2847090437131%29%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Trine%20Skei%20Grande%20%28Venstre%29%20-%20February%202019%20%2847090437131%29%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:52.146Z"
+  },
+  {
+    "personId": "person-anniken-hauglie",
+    "personName": "Anniken Hauglie",
+    "wikidataId": "Q15477955",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Foto%20Mats%20Bakken%20www.matsbakken.com%20%2850226568237%29%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Foto%20Mats%20Bakken%20www.matsbakken.com%20%2850226568237%29%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:52.997Z"
+  },
+  {
+    "personId": "person-tonje-brenna",
+    "personName": "Tonje Brenna",
+    "wikidataId": "Q12006785",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/NM%20-%20Tonje%20Brenna-6%20-%2051976038435%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/NM%20-%20Tonje%20Brenna-6%20-%2051976038435%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:53.482Z"
+  },
+  {
+    "personId": "person-anette-trettebergstuen",
+    "personName": "Anette Trettebergstuen",
+    "wikidataId": "Q4761757",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Portrettfoto%20av%20kultur-%20og%20likestillingsminister%20Anette%20Trettebergstuen%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Portrettfoto%20av%20kultur-%20og%20likestillingsminister%20Anette%20Trettebergstuen%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:54.064Z"
+  },
+  {
+    "personId": "person-julie-brodtkorb",
+    "personName": "Julie Brodtkorb",
+    "wikidataId": "Q15299167",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Julie%20Brodtkorb%20%28191822%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Julie%20Brodtkorb%20%28191822%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:54.860Z"
+  },
+  {
+    "personId": "person-manuela-ramin-osmundsen",
+    "personName": "Manuela Ramin-Osmundsen",
+    "wikidataId": "Q462761",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Manuela%20Ramin-Osmundsen.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Manuela%20Ramin-Osmundsen.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:55.381Z"
+  },
+  {
+    "personId": "person-tore-tonne",
+    "personName": "Tore Tønne",
+    "wikidataId": "Q4993411",
+    "fetchedAt": "2026-06-11T09:29:55.882Z"
+  },
+  {
+    "personId": "person-harald-tom-nesvik",
+    "personName": "Harald Tom Nesvik",
+    "fetchedAt": "2026-06-11T09:29:56.511Z"
+  },
+  {
+    "personId": "person-joran-kallmyr",
+    "personName": "Jøran Kallmyr",
+    "wikidataId": "Q11979676",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/J%20Kallmyr.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/J%20Kallmyr.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:57.443Z"
+  },
+  {
+    "personId": "person-bjarne-haakon-hanssen",
+    "personName": "Bjarne Håkon Hanssen",
+    "wikidataId": "Q879359",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Bjarne%20H%C3%A5kon%20Hanssen%202009%2004%2019%20B.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Bjarne%20H%C3%A5kon%20Hanssen%202009%2004%2019%20B.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:57.929Z"
+  },
+  {
+    "personId": "person-karita-bekkemellem",
+    "personName": "Karita Bekkemellem",
+    "wikidataId": "Q543818",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Karita%20Bekkemellem%2001%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Karita%20Bekkemellem%2001%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:58.425Z"
+  },
+  {
+    "personId": "person-knut-arild-hareide",
+    "personName": "Knut Arild Hareide",
+    "wikidataId": "Q1350399",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Knut%20Arild%20Hareide%20%28KrF%29.JPG",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Knut%20Arild%20Hareide%20%28KrF%29.JPG?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:59.075Z"
+  },
+  {
+    "personId": "person-dagrun-eriksen",
+    "personName": "Dagrun Eriksen",
+    "wikidataId": "Q1771757",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Dagrun%20Eriksen%20Foto%20%28cropped%29.JPG",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Dagrun%20Eriksen%20Foto%20%28cropped%29.JPG?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:29:59.699Z"
+  },
+  {
+    "personId": "person-ola-borten-moe",
+    "personName": "Ola Borten Moe",
+    "wikidataId": "Q728444",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/The%20Government%27s%20Banquet%20at%20Oslo%20City%20Hall%20%28Ola%20Borten%20Moe%2C%20cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Government%27s%20Banquet%20at%20Oslo%20City%20Hall%20%28Ola%20Borten%20Moe%2C%20cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:00.185Z"
+  },
+  {
+    "personId": "person-tord-lien",
+    "personName": "Tord Lien",
+    "wikidataId": "Q6513865",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Tord%20Lien%208293.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Tord%20Lien%208293.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:00.982Z"
+  },
+  {
+    "personId": "person-tor-mikkel-wara",
+    "personName": "Tor Mikkel Wara",
+    "wikidataId": "Q6513446",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Tor%20Mikkel%20Wara%2C%202026.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Tor%20Mikkel%20Wara%2C%202026.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:01.691Z"
+  },
+  {
+    "personId": "person-robert-eriksson",
+    "personName": "Robert Eriksson",
+    "wikidataId": "Q6515236",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Robert%20Eriksson.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Robert%20Eriksson.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:02.332Z"
+  },
+  {
+    "personId": "person-kjell-borge-freiberg",
+    "personName": "Kjell-Børge Freiberg",
+    "wikidataId": "Q11213033",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Kjell-B%C3%B8rge%20Freiberg%20%28cropped%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kjell-B%C3%B8rge%20Freiberg%20%28cropped%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:03.085Z"
+  },
+  {
+    "personId": "person-terje-soviknes",
+    "personName": "Terje Søviknes",
+    "wikidataId": "Q438098",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Terje%20S%C3%B8viknes%20%28191503%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Terje%20S%C3%B8viknes%20%28191503%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:03.844Z"
+  },
+  {
+    "personId": "person-kristin-clemet",
+    "personName": "Kristin Clemet",
+    "wikidataId": "Q446695",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Kristin%20Clemet.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kristin%20Clemet.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:04.652Z"
+  },
+  {
+    "personId": "person-kristin-halvorsen",
+    "personName": "Kristin Halvorsen",
+    "wikidataId": "Q236621",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Kristin%20Halvorsen%20%28174925%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kristin%20Halvorsen%20%28174925%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:05.269Z"
+  },
+  {
+    "personId": "person-heikki-holmas",
+    "personName": "Heikki Holmås",
+    "wikidataId": "Q4209561",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Heikki%20Holm%C3%A5s.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Heikki%20Holm%C3%A5s.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:05.852Z"
+  },
+  {
+    "personId": "person-ola-elvestuen",
+    "personName": "Ola Elvestuen",
+    "wikidataId": "Q11993308",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Ola%20Elvestuen%20%2846689510514%29.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Ola%20Elvestuen%20%2846689510514%29.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:07.708Z"
+  },
+  {
+    "personId": "person-jan-christian-vestre",
+    "personName": "Jan Christian Vestre",
+    "wikidataId": "Q17113622",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/JanChristianVestre.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/JanChristianVestre.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:08.428Z"
+  },
+  {
+    "personId": "person-nicolai-tangen",
+    "personName": "Nicolai Tangen",
+    "wikidataId": "Q56408252",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/NicolaiTangen.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/NicolaiTangen.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:08.951Z"
+  },
+  {
+    "personId": "person-yngve-slyngstad",
+    "personName": "Yngve Slyngstad",
+    "wikidataId": "Q8054055",
+    "imageUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Yngve%20Slyngstad%2C%20NBIM.jpg",
+    "thumbUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Yngve%20Slyngstad%2C%20NBIM.jpg?width=400",
+    "source": "wikidata",
+    "fetchedAt": "2026-06-11T09:30:09.451Z"
+  }
+]
