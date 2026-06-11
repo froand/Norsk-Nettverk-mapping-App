@@ -111,6 +111,31 @@ export interface KaranteneDecision {
   restrictionMonths: number;
   reasoning: string;
   pdfUrl?: string;
+  year?: number;
+  classification?: "A" | "B" | "C" | "D";
+}
+
+export interface PersonPosition {
+  title: string;
+  organization: string;
+  type: "political" | "government" | "private" | "board" | "committee";
+  startYear?: number;
+  endYear?: number | null;
+  isCurrent: boolean;
+  description?: string;
+}
+
+export interface PersonDetails {
+  id: string;
+  name: string;
+  party?: string;
+  fylke?: string;
+  email?: string;
+  birthYear?: number;
+  imageUrl?: string;
+  committees?: string[];
+  currentPositions: PersonPosition[];
+  pastPositions: PersonPosition[];
 }
 
 export const API_BASE =
@@ -146,8 +171,25 @@ export const api = {
   overview: (opts?: GetOpts) => get<GraphData>("/api/graph/overview", opts),
   conflicts: (opts?: GetOpts) =>
     get<ConflictOfInterest[]>("/api/graph/conflicts", opts),
+  conflictsForPerson: (personId: string, opts?: GetOpts) =>
+    get<ConflictOfInterest[]>(
+      `/api/graph/conflicts/${encodeURIComponent(personId)}`,
+      opts,
+    ),
   timelines: (opts?: GetOpts) =>
     get<PositionTimeline[]>("/api/graph/timelines", opts),
+  timeline: (personId: string, opts?: GetOpts) =>
+    get<PositionTimeline>(
+      `/api/graph/timeline/${encodeURIComponent(personId)}`,
+      opts,
+    ),
+  personDetails: (personId: string, opts?: GetOpts) =>
+    get<PersonDetails>(
+      `/api/graph/person-details/${encodeURIComponent(personId)}`,
+      opts,
+    ),
+  personNetwork: (personId: string, opts?: GetOpts) =>
+    get<GraphData>(`/api/graph/person/${encodeURIComponent(personId)}`, opts),
   karanteneList: (opts?: GetOpts) =>
     get<KaranteneDecision[]>("/api/karantene", opts),
   search: (q: string, opts?: GetOpts) =>

@@ -1,4 +1,5 @@
 import { Activity, Bell, LineChart, AlertTriangle } from "lucide-react";
+import Link from "next/link";
 import { strings } from "@/lib/strings/nb";
 import {
   loadDashboardData,
@@ -143,7 +144,10 @@ function FeedItem({ transition: t }: { transition: RevolvingDoorTransition }) {
   const badgeClass = isRevolvingDoor ? "badge-warning" : "badge-danger";
 
   return (
-    <div className="card-surface p-3">
+    <Link
+      href={`/profile/${encodeURIComponent(t.personId)}`}
+      className="block card-surface p-3 hover:border-[var(--color-primary)]/50 transition-colors"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
           <div className="size-10 rounded-full bg-[var(--color-secondary-container)] shrink-0" />
@@ -163,7 +167,7 @@ function FeedItem({ transition: t }: { transition: RevolvingDoorTransition }) {
           {badge}
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -171,8 +175,9 @@ function ConflictCard({ conflict }: { conflict: ConflictOfInterest }) {
   const border = severityBorder(conflict.severity);
   const score = severityScore(conflict.severity);
   return (
-    <div
-      className={`card-surface ${border} w-44 shrink-0 p-3 flex flex-col items-center gap-2`}
+    <Link
+      href={`/profile/${encodeURIComponent(conflict.personId)}`}
+      className={`card-surface ${border} w-44 shrink-0 p-3 flex flex-col items-center gap-2 hover:border-[var(--color-primary)]/60 transition-colors`}
     >
       <div className="size-16 rounded-full bg-[var(--color-secondary-container)]" />
       <p className="text-sm font-semibold text-center truncate w-full">
@@ -184,7 +189,7 @@ function ConflictCard({ conflict }: { conflict: ConflictOfInterest }) {
       <span className={`chip mt-1 text-[10px] tracking-wider ${severityBadge(conflict.severity)}`}>
         {score}/100
       </span>
-    </div>
+    </Link>
   );
 }
 
