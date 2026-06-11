@@ -1,6 +1,10 @@
 /**
  * Norsk Nettverk v2 — minimal API client.
  * Mirrors the v1 backend's REST API (forked into this repo's backend/).
+ *
+ * - `API_URL` is read in Server Components (server-only).
+ * - `NEXT_PUBLIC_API_URL` is the browser-visible fallback.
+ * - Per-call `cache`/`next.revalidate` options can be passed via opts.
  */
 
 // Types are intentionally inlined (not imported from backend) so the
@@ -56,13 +60,82 @@ export interface GraphData {
   links: GraphLink[];
 }
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+export interface TimelinePosition {
+  orgId: string;
+  orgName: string;
+  role: string;
+  category: RoleCategory;
+  sector?: string;
+  startYear: number;
+  endYear?: number;
+}
 
-async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
+export interface PositionTimeline {
+  personId: string;
+  personName: string;
+  positions: TimelinePosition[];
+}
+
+export type ConflictType =
+  | "revolving_door"
+  | "concurrent"
+  | "sector_overlap"
+  | "shared_network";
+
+export type ConflictSeverity = "critical" | "high" | "medium" | "low";
+
+export interface ConflictOfInterest {
+  personId: string;
+  personName: string;
+  politicalRole: string;
+  politicalOrg: string;
+  boardRole: string;
+  boardOrg: string;
+  sector: string;
+  conflictType: ConflictType;
+  description: string;
+  severity: ConflictSeverity;
+  classification?: "A" | "B" | "C" | "D";
+  sources?: { label: string; url: string }[];
+}
+
+export interface KaranteneDecision {
+  id: string;
+  personName: string;
+  date: string;
+  previousRole: string;
+  previousDepartment: string;
+  newRole: string;
+  newOrganization: string;
+  quarantineMonths: number;
+  restrictionMonths: number;
+  reasoning: string;
+  pdfUrl?: string;
+}
+
+export const API_BASE =
+  process.env.API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:3011";
+
+type GetOpts = {
+  /** Default: 60s ISR. Pass 0 for no caching, or override per call. */
+  revalidate?: number | false;
+  cache?: RequestCache;
+  signal?: AbortSignal;
+};
+
+async function get<T>(path: string, opts: GetOpts = {}): Promise<T> {
+  const init: RequestInit & { next?: { revalidate?: number | false } } = {
     headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
+    signal: opts.signal,
+  };
+  if (opts.cache) {
+    init.cache = opts.cache;
+  } else {
+    init.next = { revalidate: opts.revalidate ?? 60 };
+  }
+  const res = await fetch(`${API_BASE}${path}`, init);
   if (!res.ok) {
     throw new Error(`API ${path} failed: ${res.status} ${res.statusText}`);
   }
@@ -70,15 +143,21 @@ async function get<T>(path: string): Promise<T> {
 }
 
 export const api = {
-  graph: () => get<GraphData>("/api/graph"),
-  search: (q: string) =>
+  overview: (opts?: GetOpts) => get<GraphData>("/api/graph/overview", opts),
+  conflicts: (opts?: GetOpts) =>
+    get<ConflictOfInterest[]>("/api/graph/conflicts", opts),
+  timelines: (opts?: GetOpts) =>
+    get<PositionTimeline[]>("/api/graph/timelines", opts),
+  karanteneList: (opts?: GetOpts) =>
+    get<KaranteneDecision[]>("/api/karantene", opts),
+  search: (q: string, opts?: GetOpts) =>
     get<{ persons: Person[]; organizations: Organization[] }>(
       `/api/search?q=${encodeURIComponent(q)}`,
+      opts,
     ),
-  karantene: (personId: string) =>
-    get<{ person: string; decisions: { title: string; pdfUrl: string }[] }>(
+  karantene: (personId: string, opts?: GetOpts) =>
+    get<KaranteneDecision[]>(
       `/api/karantene/${encodeURIComponent(personId)}`,
+      opts,
     ),
 };
-
-export { BASE as API_BASE };

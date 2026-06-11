@@ -23,7 +23,8 @@ const { aiRoutes } = await import('./routes/ai.js');
 const { karanteneRoutes } = await import('./routes/karantene.js');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// v2 default is 3011 so it doesn't collide with v1 backend on 3001.
+const PORT = process.env.PORT || 3011;
 
 app.use(cors());
 app.use(express.json());

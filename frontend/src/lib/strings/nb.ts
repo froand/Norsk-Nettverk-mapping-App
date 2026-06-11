@@ -17,6 +17,7 @@ export const strings = {
     intelligenceHeading: "Global intelligence",
     investigations: "Undersøkelser",
     revolvingDoor: "Roterende dør",
+    activeAlerts: "Aktive varsler",
     revolvingDoorFeed: "Roterende dør — siste hendelser",
     highConflict: "Høyeste konfliktnivå",
     sectorWatchlist: "Sektor-overvåking",
@@ -25,6 +26,10 @@ export const strings = {
     deltaVsLastMonth: "vs. forrige måned",
     badgeRevolvingDoor: "ROTERENDE DØR",
     badgePotentialConflict: "POTENSIELL KONFLIKT",
+    emptyFeed: "Ingen overganger funnet.",
+    emptyRanking: "Ingen konfliktdata tilgjengelig.",
+    partialDataWarning: "Noen datakilder er midlertidig utilgjengelige.",
+    sources: "Kilder",
   },
   network: {
     title: "Nettverkskart",
