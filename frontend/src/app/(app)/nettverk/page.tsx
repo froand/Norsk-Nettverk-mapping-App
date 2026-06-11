@@ -1,24 +1,45 @@
+import { AlertTriangle } from "lucide-react";
+import { api, type ConflictOfInterest, type GraphData } from "@/lib/api";
 import { strings } from "@/lib/strings/nb";
+import { NetworkCanvas } from "./network-canvas";
 
-export default function NetworkPage() {
+export const dynamic = "force-dynamic";
+
+export default async function NetworkPage() {
+  const [overviewR, conflictsR] = await Promise.allSettled([
+    api.overview(),
+    api.conflicts(),
+  ]);
+
+  const overview: GraphData | null =
+    overviewR.status === "fulfilled" ? overviewR.value : null;
+  const conflicts: ConflictOfInterest[] =
+    conflictsR.status === "fulfilled" ? conflictsR.value : [];
+  const partial =
+    overviewR.status === "rejected" || conflictsR.status === "rejected";
+
+  if (!overview) {
+    return (
+      <div className="px-4 pt-6">
+        <div className="rounded-xl border border-[var(--color-conflict-high)]/40 bg-[var(--color-conflict-high)]/10 px-3 py-2 flex items-center gap-2 text-xs text-[var(--color-conflict-high)]">
+          <AlertTriangle className="size-3.5 shrink-0" />
+          Kunne ikke laste nettverket. Prøv igjen senere.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-[calc(100dvh-9rem)]">
-      <div className="px-4 pt-4 flex gap-2 overflow-x-auto scrollbar-hide">
-        <span className="chip chip-active">{strings.network.filter.all}</span>
-        <span className="chip">{strings.network.filter.energy}</span>
-        <span className="chip">{strings.network.filter.parliament}</span>
-        <span className="chip">{strings.network.filter.lobby}</span>
-      </div>
-      <div className="flex-1 mx-4 my-4 rounded-2xl card-surface flex items-center justify-center text-[var(--color-fg-dim)] text-sm">
-        Nettverkskart kommer
-      </div>
-      <div className="px-4 pb-4 flex items-center justify-between">
-        <span className="text-[11px] text-[var(--color-fg-dim)] tracking-wider flex items-center gap-2">
-          <span className="size-2 rounded-full bg-[var(--color-tertiary)] animate-pulse" />
-          {strings.network.liveFeed}
-        </span>
-        <button className="chip">{strings.network.legend}</button>
-      </div>
+      {partial ? (
+        <div className="px-4 pt-3">
+          <div className="rounded-xl border border-[var(--color-tertiary)]/40 bg-[var(--color-tertiary)]/10 px-3 py-2 flex items-center gap-2 text-xs text-[var(--color-tertiary)]">
+            <AlertTriangle className="size-3.5 shrink-0" />
+            {strings.dashboard.partialDataWarning}
+          </div>
+        </div>
+      ) : null}
+      <NetworkCanvas overview={overview} conflicts={conflicts} />
     </div>
   );
 }
