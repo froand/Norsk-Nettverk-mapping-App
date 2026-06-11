@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
 import { loadProfile } from "@/lib/profile-data";
+import { WatchToggleButton } from "../../varsler/watchlist-section";
 import type {
   ConflictOfInterest,
   ConflictSeverity,
@@ -71,7 +72,7 @@ export default async function ProfilePage({
                 {currentTopRole.title}, {currentTopRole.organization}
               </p>
             ) : null}
-            <div className="mt-2 flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
               {details.party ? (
                 <span className="chip text-[10px] uppercase tracking-wider">
                   {strings.profile.party}: {details.party}
@@ -82,6 +83,7 @@ export default async function ProfilePage({
                   {strings.profile.fylke}: {details.fylke}
                 </span>
               ) : null}
+              <WatchToggleButton personId={details.id} name={details.name} />
             </div>
           </div>
         </div>

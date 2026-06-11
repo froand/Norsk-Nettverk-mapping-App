@@ -1,9 +1,22 @@
-import { Bell, Plus } from "lucide-react";
+import Link from "next/link";
+import {
+  AlertTriangle,
+  Bell,
+  FileText,
+  RefreshCcw,
+  Scale,
+} from "lucide-react";
 import { strings } from "@/lib/strings/nb";
+import { loadAlerts, type AlertItem, type AlertKind } from "@/lib/alerts-data";
+import { WatchlistSection } from "./watchlist-section";
 
-export default function AlertsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AlertsPage() {
+  const { items, partial } = await loadAlerts();
+
   return (
-    <div>
+    <>
       <section className="px-4 pt-4">
         <h1 className="text-xl font-bold flex items-center gap-2">
           <Bell className="size-5 text-[var(--color-primary)]" />
@@ -14,84 +27,114 @@ export default function AlertsPage() {
         </p>
       </section>
 
-      <ul className="px-4 pt-4 space-y-2 pb-6">
-        <AlertRow
-          title="Anders S. Dahl"
-          subtitle="Olje- og energidepartementet → Equinor styre"
-          ago="14 min siden"
-          badge={strings.dashboard.badgeRevolvingDoor}
-          tone="warning"
-        />
-        <AlertRow
-          title="Ingrid Foss"
-          subtitle="Storting → First House Consulting"
-          ago="2 timer siden"
-          badge="LOBBY-REGISTRERING"
-          tone="danger"
-        />
-        <AlertRow
-          title="Erik Magnussen"
-          subtitle="Helse- og omsorgsdept. → Telenor Health"
-          ago="1 dag siden"
-          badge="UNDERSØKES"
-          tone="primary"
-        />
-      </ul>
-
-      <section className="px-4 pt-2">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-fg-dim)] mb-3">
-          Overvåking
-        </h2>
-        <div className="card-surface p-6 flex flex-col items-center gap-3 text-center">
-          <p className="text-sm text-[var(--color-fg-muted)]">
-            {strings.alerts.watchlistEmpty}
-          </p>
-          <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--color-primary)] text-[var(--color-on-primary)] text-xs font-semibold">
-            <Plus className="size-3" />
-            {strings.alerts.addToWatchlist}
-          </button>
+      {partial ? (
+        <div className="px-4 pt-3">
+          <div className="rounded-xl border border-[var(--color-tertiary)]/40 bg-[var(--color-tertiary)]/10 px-3 py-2 flex items-center gap-2 text-xs text-[var(--color-tertiary)]">
+            <AlertTriangle className="size-3.5 shrink-0" />
+            {strings.dashboard.partialDataWarning}
+          </div>
         </div>
+      ) : null}
+
+      <div className="pt-4">
+        <WatchlistSection alerts={items} />
+      </div>
+
+      <section className="px-4 pt-6 pb-8">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-fg-dim)] mb-3">
+          {strings.alerts.feedTitle} · {items.length}
+        </h2>
+        {items.length === 0 ? (
+          <div className="card-surface p-4 text-center text-xs text-[var(--color-fg-dim)]">
+            {strings.alerts.feedEmpty}
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {items.map((item) => (
+              <AlertRow key={item.id} item={item} />
+            ))}
+          </ul>
+        )}
       </section>
-    </div>
+    </>
   );
 }
 
-function AlertRow({
-  title,
-  subtitle,
-  ago,
-  badge,
-  tone,
-}: {
-  title: string;
-  subtitle: string;
-  ago: string;
-  badge: string;
-  tone: "warning" | "danger" | "primary";
-}) {
-  const badgeClass =
-    tone === "warning"
-      ? "badge-warning"
-      : tone === "danger"
-        ? "badge-danger"
-        : "chip-active";
+function AlertRow({ item }: { item: AlertItem }) {
+  const Icon = kindIcon(item.kind);
+  const badge = kindBadge(item.kind);
+  const badgeClass = kindBadgeClass(item.kind);
+  const linkable = !!item.personId;
+  // Avoid nested-anchor HTML: outer wrapper is a div, only the title links.
   return (
     <li className="card-surface p-3 flex items-start gap-3">
-      <div className="size-10 rounded-full bg-[var(--color-secondary-container)] shrink-0" />
+      <div
+        className={`size-10 rounded-full grid place-items-center shrink-0 ${kindIconBg(item.kind)}`}
+      >
+        <Icon className="size-4" />
+      </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
-          <p className="font-semibold text-sm truncate">{title}</p>
+          {linkable ? (
+            <Link
+              href={`/profile/${encodeURIComponent(item.personId!)}`}
+              className="font-semibold text-sm truncate text-[var(--color-fg)] hover:text-[var(--color-primary)] transition-colors"
+            >
+              {item.title}
+            </Link>
+          ) : (
+            <p className="font-semibold text-sm truncate">{item.title}</p>
+          )}
           <span
             className={`chip text-[10px] uppercase tracking-wider whitespace-nowrap shrink-0 ${badgeClass}`}
           >
             {badge}
           </span>
         </div>
-        <p className="text-xs text-[var(--color-fg-muted)] truncate">
-          {subtitle}
-        </p>
-        <p className="text-[11px] text-[var(--color-fg-dim)] mt-1">{ago}</p>
+        {item.subtitle ? (
+          <p className="text-xs text-[var(--color-fg-muted)] truncate">
+            {item.subtitle}
+          </p>
+        ) : null}
+        <div className="text-[11px] text-[var(--color-fg-dim)] mt-1 flex items-center gap-3">
+          <span>{item.dateLabel}</span>
+          {item.pdfUrl ? (
+            <a
+              href={item.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[var(--color-primary)] hover:underline"
+            >
+              <FileText className="size-3" />
+              {strings.alerts.openPdf}
+            </a>
+          ) : null}
+        </div>
       </div>
     </li>
   );
+}
+
+function kindIcon(k: AlertKind) {
+  if (k === "karantene") return Scale;
+  if (k === "revolving_door") return RefreshCcw;
+  return AlertTriangle;
+}
+
+function kindIconBg(k: AlertKind): string {
+  if (k === "karantene") return "bg-[var(--color-primary)]/15 text-[var(--color-primary)]";
+  if (k === "revolving_door") return "bg-[var(--color-tertiary)]/15 text-[var(--color-tertiary)]";
+  return "bg-[var(--color-conflict-high)]/15 text-[var(--color-conflict-high)]";
+}
+
+function kindBadge(k: AlertKind): string {
+  if (k === "karantene") return strings.alerts.badgeKarantene;
+  if (k === "revolving_door") return strings.alerts.badgeRevolving;
+  return strings.alerts.badgeConflict;
+}
+
+function kindBadgeClass(k: AlertKind): string {
+  if (k === "karantene") return "chip-active";
+  if (k === "revolving_door") return "badge-warning";
+  return "badge-danger";
 }
