@@ -90,6 +90,17 @@ jobs:
             --revision-suffix "${{ steps.build.outputs.tag }}" \
             --output none
 
+      - name: Update refresh job image
+        # The daily refresh job runs the same backend image but with a
+        # different entrypoint (node dist/jobs/refresh.js). Roll it forward
+        # together with the API so the scheduled run picks up new code.
+        run: |
+          az containerapp job update \
+            --resource-group "$RESOURCE_GROUP" \
+            --name norsk-nettverk-v2-refresh-job \
+            --image "${ACR_NAME}.azurecr.io/norsk-nettverk-v2-backend:${{ steps.build.outputs.tag }}" \
+            --output none
+
       - name: Show backend revision
         run: |
           az containerapp revision list \

@@ -9,6 +9,15 @@ param environmentName string = 'norsk-nettverk-v2'
 @description('Tag applied to every resource so cost reports can group them')
 param costCenterTag string = 'norsk-nettverk-v2'
 
+@description('Backend container image (fully qualified). Defaults to a public placeholder so first-time deploys succeed; pass the real ACR tag on subsequent deploys to avoid resetting the running revision.')
+param backendImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+
+@description('Frontend container image (fully qualified). Same idea as backendImage.')
+param frontendImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+
+@description('Refresh job container image. Should normally match backendImage so the job entrypoint can run dist/jobs/refresh.js.')
+param refreshJobImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+
 var commonTags = {
   app: 'norsk-nettverk-v2'
   env: 'demo'
@@ -67,6 +76,41 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' = {
   }
 }
 
+// Storage account for the daily refresh job's snapshots + change feed. The
+// backend Container App mounts the share at /mnt/data so the API can read
+// what the Job writes. Shared-key access stays enabled because Container
+// Apps env-storage uses the account key.
+resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+  name: replace('${environmentName}sa', '-', '')
+  location: location
+  tags: commonTags
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
+    // Tenant policy disallows shared-key access; we use Microsoft Entra
+    // (managed identity + Storage Blob Data Contributor) instead.
+    allowSharedKeyAccess: false
+    minimumTlsVersion: 'TLS1_2'
+    supportsHttpsTrafficOnly: true
+  }
+}
+
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+  parent: storage
+  name: 'default'
+}
+
+resource dataContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: blobService
+  name: 'data'
+  properties: {
+    publicAccess: 'None'
+  }
+}
+
 // User-assigned identity shared by both container apps so we only need to
 // grant AcrPull once.
 resource pullIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -90,6 +134,22 @@ resource acrPullAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' 
   }
 }
 
+// Storage Blob Data Contributor for the workload identity so the backend
+// app and the refresh job can read/write snapshot blobs without shared keys.
+var blobDataContributorRoleId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+)
+resource blobDataAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storage.id, pullIdentity.id, 'StorageBlobDataContributor')
+  scope: storage
+  properties: {
+    principalId: pullIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: blobDataContributorRoleId
+  }
+}
+
 // Backend Container App — internal ingress only. The frontend Container App
 // reaches it over the Container Apps Environment's internal DNS.
 resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
@@ -104,6 +164,7 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
   }
   dependsOn: [
     acrPullAssignment
+    blobDataAssignment
   ]
   properties: {
     managedEnvironmentId: containerAppEnv.id
@@ -125,9 +186,9 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
       containers: [
         {
           name: 'backend'
-          // Placeholder image swapped out by the deploy workflow once ACR
-          // has a real backend build.
-          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          // Image is parameterised so re-deploying Bicep does not reset
+          // the running revision back to the helloworld placeholder.
+          image: backendImage
           resources: {
             cpu: json('0.5')
             memory: '1Gi'
@@ -140,6 +201,18 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
             {
               name: 'PORT'
               value: '3011'
+            }
+            {
+              name: 'AZURE_STORAGE_ACCOUNT'
+              value: storage.name
+            }
+            {
+              name: 'AZURE_STORAGE_CONTAINER'
+              value: dataContainer.name
+            }
+            {
+              name: 'AZURE_CLIENT_ID'
+              value: pullIdentity.properties.clientId
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -212,7 +285,7 @@ resource frontendApp 'Microsoft.App/containerApps@2023-05-01' = {
       containers: [
         {
           name: 'frontend'
-          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          image: frontendImage
           resources: {
             cpu: json('0.5')
             memory: '1Gi'
@@ -253,6 +326,87 @@ resource frontendApp 'Microsoft.App/containerApps@2023-05-01' = {
   }
 }
 
+// Daily refresh job — re-scans Brreg + Karantenenemnda, diffs against the
+// Daily refresh job — re-scans Brreg + Karantenenemnda, diffs against the
+// previous snapshot stored as JSON blobs in `${storage}/data/`, appends new
+// entries to `changes.json`. Triggered by cron at 06:00 UTC (~08:00 local).
+resource refreshJob 'Microsoft.App/jobs@2024-03-01' = {
+  name: '${environmentName}-refresh-job'
+  location: location
+  tags: commonTags
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${pullIdentity.id}': {}
+    }
+  }
+  dependsOn: [
+    acrPullAssignment
+    blobDataAssignment
+  ]
+  properties: {
+    environmentId: containerAppEnv.id
+    configuration: {
+      triggerType: 'Schedule'
+      replicaTimeout: 600
+      replicaRetryLimit: 1
+      scheduleTriggerConfig: {
+        cronExpression: '0 6 * * *'
+        parallelism: 1
+        replicaCompletionCount: 1
+      }
+      registries: [
+        {
+          server: acr.properties.loginServer
+          identity: pullIdentity.id
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: 'refresh'
+          // Same image as the backend API; the job uses a different entrypoint
+          // (node dist/jobs/refresh.js) rather than starting the HTTP server.
+          image: refreshJobImage
+          command: [
+            'node'
+          ]
+          args: [
+            'dist/jobs/refresh.js'
+          ]
+          resources: {
+            cpu: json('0.5')
+            memory: '1Gi'
+          }
+          env: [
+            {
+              name: 'NODE_ENV'
+              value: 'production'
+            }
+            {
+              name: 'AZURE_STORAGE_ACCOUNT'
+              value: storage.name
+            }
+            {
+              name: 'AZURE_STORAGE_CONTAINER'
+              value: dataContainer.name
+            }
+            {
+              name: 'AZURE_CLIENT_ID'
+              value: pullIdentity.properties.clientId
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              value: appInsights.properties.ConnectionString
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
 output acrLoginServer string = acr.properties.loginServer
 output acrName string = acr.name
 output backendAppName string = backendApp.name
@@ -262,3 +416,5 @@ output frontendUrl string = 'https://${frontendApp.properties.configuration.ingr
 output appInsightsConnectionString string = appInsights.properties.ConnectionString
 output pullIdentityId string = pullIdentity.id
 output pullIdentityClientId string = pullIdentity.properties.clientId
+output refreshJobName string = refreshJob.name
+output storageAccountName string = storage.name

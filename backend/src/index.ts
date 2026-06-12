@@ -21,6 +21,7 @@ const { companyRoutes } = await import('./routes/company.js');
 const { sourcesRoutes } = await import('./routes/sources.js');
 const { aiRoutes } = await import('./routes/ai.js');
 const { karanteneRoutes } = await import('./routes/karantene.js');
+const { changesRoutes } = await import('./routes/changes.js');
 
 const app = express();
 // v2 default is 3011 so it doesn't collide with v1 backend on 3001.
@@ -36,6 +37,7 @@ app.use('/api/company', companyRoutes);
 app.use('/api/sources', sourcesRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/karantene', karanteneRoutes);
+app.use('/api/changes', changesRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

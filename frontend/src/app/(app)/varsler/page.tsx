@@ -8,12 +8,17 @@ import {
 } from "lucide-react";
 import { strings } from "@/lib/strings/nb";
 import { loadAlerts, type AlertItem, type AlertKind } from "@/lib/alerts-data";
+import { loadChanges } from "@/lib/changes-data";
+import { ChangesSection } from "./changes-section";
 import { WatchlistSection } from "./watchlist-section";
 
 export const dynamic = "force-dynamic";
 
 export default async function AlertsPage() {
-  const { items, partial } = await loadAlerts();
+  const [{ items, partial }, changes] = await Promise.all([
+    loadAlerts(),
+    loadChanges(7),
+  ]);
 
   return (
     <>
@@ -35,6 +40,8 @@ export default async function AlertsPage() {
           </div>
         </div>
       ) : null}
+
+      <ChangesSection data={changes} />
 
       <div className="pt-4">
         <WatchlistSection alerts={items} />
